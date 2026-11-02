@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LeadSort Pro - Customer Lead Priority & Feedback Normalizer</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome for clean iconography -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857',
+            },
+            accent: {
+              500: '#6366f1',
+              600: '#4f46e5',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-emerald-500 selection:text-white">
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="fixed top-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- Clean Executive Header -->
+  <header class="border-b border-slate-800/80 bg-slate-950/80 sticky top-0 z-40 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3.5">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 via-teal-600 to-indigo-600 flex items-center justify-center shadow-lg shadow-emerald-500/20 ring-1 ring-white/20">
+          <i class="fa-solid fa-layer-group text-white text-base"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-base font-bold text-white tracking-tight">LeadSort Pro</h1>
+            <span class="text-[11px] bg-emerald-500/10 text-emerald-400 font-semibold px-2 py-0.5 rounded-md border border-emerald-500/20">Full-Stack Flask</span>
+          </div>
+          <p class="text-xs text-slate-400 flex items-center gap-1.5 font-medium">
+            <span>Multilingual Customer Feedback & Unstructured Sheet Normalizer</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Author Badge & Action Buttons -->
+      <div class="flex items-center gap-3">
+        <div class="hidden sm:flex flex-col items-end text-right px-3 py-1 rounded-lg bg-slate-900 border border-slate-800">
+          <span class="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">Engineered by</span>
+          <span class="text-xs font-semibold text-slate-200">Suraj Santra <span class="text-emerald-400">&bull; CodeLiner</span></span>
+        </div>
+
+        <button id="loadSampleBtn" class="px-3.5 py-2 text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl shadow-lg shadow-emerald-600/25 transition-all flex items-center gap-2 active:scale-95">
+          <i class="fa-solid fa-sparkles"></i>
+          <span>Load Sample Dataset</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+    <!-- Top Workflow Cards Overview -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="panel-card rounded-2xl p-4 flex items-start gap-3.5 border-emerald-500/20 bg-gradient-to-b from-emerald-950/20 to-slate-900/60">
+        <div class="w-8 h-8 rounded-lg bg-emerald-500/15 text-emerald-400 flex items-center justify-center font-bold text-sm shrink-0 border border-emerald-500/30">
+          1
+        </div>
+        <div>
+          <h2 class="text-xs font-bold text-white uppercase tracking-wider">Unstructured XLS Normalizer</h2>
+          <p class="text-xs text-slate-400 mt-1 leading-relaxed">Fixes messy columns, disorganized contacts, and messy headers into clean tabular entities.</p>
+        </div>
+      </div>
+
+      <div class="panel-card rounded-2xl p-4 flex items-start gap-3.5 border-indigo-500/20 bg-gradient-to-b from-indigo-950/20 to-slate-900/60">
+        <div class="w-8 h-8 rounded-lg bg-indigo-500/15 text-indigo-400 flex items-center justify-center font-bold text-sm shrink-0 border border-indigo-500/30">
+          2
+        </div>
+        <div>
+          <h2 class="text-xs font-bold text-white uppercase tracking-wider">Multilingual Translator</h2>
+          <p class="text-xs text-slate-400 mt-1 leading-relaxed">Detects reviews in any language (German, Spanish, Hindi, French, etc.) and translates to clear English.</p>
+        </div>
+      </div>
+
+      <div class="panel-card rounded-2xl p-4 flex items-start gap-3.5 border-teal-500/20 bg-gradient-to-b from-teal-950/20 to-slate-900/60">
+        <div class="w-8 h-8 rounded-lg bg-teal-500/15 text-teal-400 flex items-center justify-center font-bold text-sm shrink-0 border border-teal-500/30">
+          3
+        </div>
+        <div>
+          <h2 class="text-xs font-bold text-white uppercase tracking-wider">Automated Priority Sorter</h2>
+          <p class="text-xs text-slate-400 mt-1 leading-relaxed">Sorts leads automatically: <strong class="text-emerald-400">High Interest</strong> &rarr; <strong class="text-sky-400">Interested</strong> &rarr; <strong class="text-slate-400">Not Interested</strong>.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      
+      <!-- Upload Panel (Left 1 col) -->
+      <div class="panel-card rounded-2xl p-5 flex flex-col justify-between space-y-4">
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="text-sm font-bold text-white flex items-center gap-2">
+              <i class="fa-solid fa-file-arrow-up text-emerald-400"></i>
+              Import Spreadsheet
+            </h3>
+            <span class="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">Step 1</span>
+          </div>
+          <p class="text-xs text-slate-400 mb-4">Supports .xlsx, .xls, and .csv data sheets.</p>
+
+          <!-- Dropzone -->
+          <div id="dropZone" class="border-2 border-dashed border-slate-700/80 hover:border-emerald-500/80 rounded-xl p-6 text-center cursor-pointer transition-all bg-slate-950/50 hover:bg-slate-900/70 group">
+            <input type="file" id="fileInput" accept=".xlsx, .xls, .csv" class="hidden" />
+            <div class="w-12 h-12 mx-auto rounded-xl bg-slate-900 group-hover:bg-emerald-500/15 text-slate-400 group-hover:text-emerald-400 flex items-center justify-center mb-3 transition-colors border border-slate-800 group-hover:border-emerald-500/30">
+              <i class="fa-solid fa-file-excel text-xl"></i>
+            </div>
+            <p class="text-xs font-semibold text-slate-200">Click to browse or drop file here</p>
+            <p class="text-[11px] text-slate-500 mt-1 font-mono">XLSX, XLS, CSV files up to 25MB</p>
+          </div>
+
+          <!-- Active File Info -->
+          <div id="fileInfoBox" class="hidden mt-4 p-3 bg-slate-950/80 rounded-xl border border-slate-800 flex items-center justify-between">
+            <div class="flex items-center gap-2.5 overflow-hidden">
+              <div class="w-8 h-8 rounded-lg bg-emerald-500/15 text-emerald-400 flex items-center justify-center shrink-0">
+                <i class="fa-solid fa-table"></i>
+              </div>
+              <div class="truncate">
+                <p id="fileNameDisplay" class="text-xs font-semibold text-slate-200 truncate">data.xlsx</p>
+                <p id="fileSizeDisplay" class="text-[10px] text-slate-400 font-mono">0 KB &bull; 0 rows</p>
+              </div>
+            </div>
+            <button id="removeFileBtn" class="text-slate-400 hover:text-red-400 p-1.5 transition-colors" title="Remove file">
+              <i class="fa-solid fa-xmark text-xs"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Processing Triggers -->
+        <div class="pt-2 space-y-2.5">
+          <button id="startProcessBtn" disabled class="w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-500 disabled:bg-slate-800/80 disabled:text-slate-500 disabled:cursor-not-allowed text-white text-xs font-bold rounded-xl shadow-lg shadow-emerald-600/20 flex items-center justify-center gap-2 transition-all active:scale-98">
+            <i class="fa-solid fa-bolt"></i>
+            <span>Classify & Sort Leads</span>
+          </button>
+          <div class="flex gap-2">
+            <button id="cancelProcessBtn" disabled class="flex-1 py-2 px-3 bg-slate-900 hover:bg-red-500/20 text-slate-400 hover:text-red-400 disabled:opacity-40 disabled:pointer-events-none text-xs font-semibold rounded-xl border border-slate-800 transition-all flex items-center justify-center gap-1.5">
+              <i class="fa-solid fa-stop text-[11px]"></i> Stop
+            </button>
+            <button id="resetDataBtn" class="py-2 px-4 bg-slate-900 hover:bg-slate-800 text-slate-300 text-xs font-semibold rounded-xl border border-slate-800 transition-all flex items-center justify-center gap-1.5">
+              <i class="fa-solid fa-rotate-left text-[11px]"></i> Reset
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Execution & Metrics Board (Right 2 cols) -->
+      <div class="lg:col-span-2 panel-card rounded-2xl p-5 flex flex-col justify-between space-y-4">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-sm font-bold text-white flex items-center gap-2">
+              <i class="fa-solid fa-chart-simple text-emerald-400"></i>
+              Execution Pipeline & Analytics
+            </h3>
+            <span id="pipelineStatusBadge" class="text-[11px] font-semibold px-3 py-1 rounded-full bg-slate-900 text-slate-400 border border-slate-800">
+              Awaiting File
+            </span>
+          </div>
+
+          <!-- Progress Bar -->
+          <div class="space-y-1.5 mb-5">
+            <div class="flex justify-between text-xs text-slate-400">
+              <span id="progressStepText">Ready to process</span>
+              <span id="progressPercentText" class="font-mono font-semibold text-slate-300">0%</span>
+            </div>
+            <div class="w-full bg-slate-950 h-2.5 rounded-full overflow-hidden p-0.5 border border-slate-800">
+              <div id="progressBar" class="bg-gradient-to-r from-emerald-500 via-teal-400 to-indigo-500 h-full rounded-full transition-all duration-300 w-0"></div>
+            </div>
+          </div>
+
+          <!-- KPI Cards Grid -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div class="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800">
+              <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Total Records</p>
+              <p id="totalRecordsCount" class="text-xl font-bold text-white mt-1">0</p>
+            </div>
+            <div class="bg-slate-950/70 p-3.5 rounded-xl border border-emerald-900/30">
+              <div class="flex items-center justify-between">
+                <p class="text-[11px] font-semibold text-emerald-400 uppercase tracking-wider">High Interest</p>
+                <i class="fa-solid fa-fire text-emerald-400 text-xs"></i>
+              </div>
+              <p id="highInterestCount" class="text-xl font-bold text-emerald-300 mt-1">0</p>
+            </div>
+            <div class="bg-slate-950/70 p-3.5 rounded-xl border border-sky-900/30">
+              <div class="flex items-center justify-between">
+                <p class="text-[11px] font-semibold text-sky-400 uppercase tracking-wider">Interested</p>
+                <i class="fa-solid fa-thumbs-up text-sky-400 text-xs"></i>
+              </div>
+              <p id="interestedCount" class="text-xl font-bold text-sky-300 mt-1">0</p>
+            </div>
+            <div class="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800">
+              <div class="flex items-center justify-between">
+                <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Not Interested</p>
+                <i class="fa-solid fa-circle-xmark text-slate-500 text-xs"></i>
+              </div>
+              <p id="notInterestedCount" class="text-xl font-bold text-slate-400 mt-1">0</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- System Log Activity Stream -->
+        <div>
+          <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5 flex items-center justify-between">
+            <span>Activity Log</span>
+            <span class="text-emerald-400 font-mono">Live</span>
+          </div>
+          <div class="bg-slate-950/90 rounded-xl p-3 border border-slate-800 font-mono text-[11px] h-24 overflow-y-auto custom-scrollbar flex flex-col-reverse text-slate-300" id="liveLogs">
+            <div class="text-slate-500">&gt; System initialized. Upload an Excel file or click 'Load Sample Dataset'.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Table & Sorted Data Card -->
+    <div class="panel-card rounded-2xl border border-slate-800 overflow-hidden shadow-2xl">
+      
+      <!-- Table Toolbar -->
+      <div class="p-4 border-b border-slate-800/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-slate-950/60">
+        <!-- Filter Pills -->
+        <div class="flex items-center gap-1.5 flex-wrap">
+          <button data-filter="all" class="filter-tab px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-600 text-white transition-all">
+            All (<span id="filterAllCount">0</span>)
+          </button>
+          <button data-filter="High Interest" class="filter-tab px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-900 hover:bg-slate-800 text-emerald-400 border border-slate-800 transition-all">
+            High Interest (<span id="filterHighCount">0</span>)
+          </button>
+          <button data-filter="Interested" class="filter-tab px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-900 hover:bg-slate-800 text-sky-400 border border-slate-800 transition-all">
+            Interested (<span id="filterMedCount">0</span>)
+          </button>
+          <button data-filter="Not Interested" class="filter-tab px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-900 hover:bg-slate-800 text-slate-400 border border-slate-800 transition-all">
+            Not Interested (<span id="filterLowCount">0</span>)
+          </button>
+        </div>
+
+        <!-- Search Bar & Export Button -->
+        <div class="flex items-center gap-2.5 w-full sm:w-auto">
+          <div class="relative flex-1 sm:w-64">
+            <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-xs text-slate-500"></i>
+            <input type="text" id="tableSearchInput" placeholder="Search customer, feedback, notes..."
+              class="w-full bg-slate-900 border border-slate-800 rounded-xl pl-8 pr-3 py-1.5 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition-colors" />
+          </div>
+
+          <button id="exportXlsxBtn" disabled class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 disabled:bg-slate-800 disabled:text-slate-600 disabled:cursor-not-allowed text-white text-xs font-bold rounded-xl shadow-lg shadow-emerald-600/20 transition-all flex items-center gap-2 whitespace-nowrap active:scale-95">
+            <i class="fa-solid fa-file-excel"></i>
+            <span>Export Sorted XLS</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Results Table -->
+      <div class="overflow-x-auto custom-scrollbar max-h-[500px]">
+        <table class="w-full text-left border-collapse text-xs">
+          <thead class="bg-slate-950 sticky top-0 z-10 border-b border-slate-800 text-slate-400 font-bold uppercase tracking-wider text-[10px]">
+            <tr>
+              <th class="py-3 px-4 w-14 text-center">Rank</th>
+              <th class="py-3 px-4">Customer & Entity</th>
+              <th class="py-3 px-4">Contact Info</th>
+              <th class="py-3 px-4">Original Feedback</th>
+              <th class="py-3 px-4">English Translation</th>
+              <th class="py-3 px-4 w-36">Intent Priority</th>
+              <th class="py-3 px-4 w-28 text-center">Score</th>
+              <th class="py-3 px-4">Evaluation Context</th>
+            </tr>
+          </thead>
+          <tbody id="resultsTableBody" class="divide-y divide-slate-800/80 text-slate-300">
+            <tr>
+              <td colspan="8" class="text-center py-16 text-slate-500">
+                <div class="flex flex-col items-center justify-center gap-2">
+                  <i class="fa-solid fa-table-list text-3xl text-slate-700"></i>
+                  <span class="font-medium">No records loaded yet. Upload your spreadsheet or click "Load Sample Dataset" above.</span>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Table Footer / Classification Hierarchy Guide -->
+      <div class="p-3.5 bg-slate-950 border-t border-slate-800/80 text-[11px] text-slate-400 flex flex-col sm:flex-row items-center justify-between gap-2">
+        <span id="footerInfoText">Showing 0 of 0 entries</span>
+        <div class="flex items-center gap-4">
+          <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> 1st: High Interest</span>
+          <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-sky-500"></span> 2nd: Interested</span>
+          <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-slate-500"></span> 3rd: Not Interested</span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Clean Footer with Requested Author Attribution -->
+  <footer class="border-t border-slate-800/80 bg-slate-950/80 mt-auto py-5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400">
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+        <span class="font-semibold text-slate-300">LeadSort Pro</span> &mdash; Multilingual Feedback Classifier & Reorganizer
+      </div>
+      <div class="flex items-center gap-2 font-medium">
+        <span>Built by <strong class="text-emerald-400">CodeLiner</strong></span>
+        <span>&bull;</span>
+        <span>By <strong class="text-white">Suraj Santra</strong></span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modal for Raw Record Deep-Dive -->
+  <div id="detailsModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="panel-card bg-slate-900 border border-slate-700 rounded-2xl max-w-2xl w-full p-6 space-y-4 shadow-2xl">
+      <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+        <h3 class="text-sm font-bold text-white flex items-center gap-2">
+          <i class="fa-solid fa-circle-info text-emerald-400"></i>
+          Record Deep Inspection & Context Details
+        </h3>
+        <button id="closeModalBtn" class="text-slate-400 hover:text-white transition-colors"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div id="modalContent" class="space-y-3 text-xs text-slate-300"></div>
+    </div>
+  </div>
+
+  <!-- Main JavaScript application -->
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
