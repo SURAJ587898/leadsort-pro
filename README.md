@@ -10,7 +10,7 @@ An enterprise-grade, full-stack web application designed to intake messy, multil
 - **Backend**: Python with **Flask REST API**, **Requests**, **Pandas**, and **OpenPyXL**.
 - **Frontend**: Responsive modern UI built with **HTML5**, **Tailwind CSS**, and **Font Awesome 6**, styled in an executive dark glassmorphic palette.
 - **AI Engine**: Powered by **Groq Cloud API** (`https://api.groq.com/openai/v1/chat/completions`) using the Groq API key securely housed in the Python backend.
-- **Security Upgrade**: In the original standalone `lead.html`, the secret Groq API key was exposed in client-side browser JavaScript. This full-stack architecture **completely protects the API key** by isolating it inside the backend (`.env` and `config.py`).
+
 - **Resilience & Rate Limiting**: Includes automated 429 rate limit backoff parsing (`try again in Xs`), model fallback cycling, and an offline local heuristic classification engine so customer data is never dropped.
 - **Direct Styled Excel Export**: Backend generates formatted `.xlsx` workbooks with custom header colors (Emerald-700), distinct priority row highlights, centered scores, and auto-spaced columns.
 
